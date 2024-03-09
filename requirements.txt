@@ -1,0 +1,2 @@
+fastapi
+JLC2KiCadLib==1.0.30
