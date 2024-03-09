@@ -29,11 +29,12 @@ async def root():
 
 
 @app.get("/add-part")
-async def add_part(jlcpcb_id: str, download_zip: bool = True, api_key: str = Security(get_api_key)):
-    if not jlcpcb_id[1:].isnumeric():
+async def add_part(jlcpcb_id_or_link: str, download_zip: bool = True, api_key: str = Security(get_api_key)):
+    working_id = jlcpcb_id_or_link.split("/")[-1]
+    if not working_id[1:].isnumeric():
         raise ValueError
 
-    subprocess_object = subprocess.run(["JLC2KiCadLib", jlcpcb_id], capture_output=True, text=True)
+    subprocess_object = subprocess.run(["JLC2KiCadLib", working_id], capture_output=True, text=True)
     if subprocess_object.returncode != 0:
         return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=subprocess_object.stderr)
 
